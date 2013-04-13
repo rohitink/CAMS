@@ -254,12 +254,6 @@ class PostAd implements ActionListener {
         
 	}
 	
-	public void listen() {
-		//Action Listener Stuff Here.
-	}
-	
-	
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -273,7 +267,13 @@ class PostAd implements ActionListener {
 			System.out.println(button.getText());
 			System.out.println("BUTTON PRESSED");
 		}
+		if(e.getSource()==back)
+		{
+			//f.remove(CONTAINER);
+			new options();
+			
+		}
 	  }
 	
 	
-	}
+}
