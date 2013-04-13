@@ -6,7 +6,31 @@ public class options  implements MouseListener{
 	//JButton post_ad;
 	JFrame f;
 	JLabel post_l, browse_l;
-	
+		
+		options(JFrame frame){
+			f = new JFrame();
+			f = frame;
+			frame.dispose();
+			p1 = new JPanel();
+			p1.setLayout(null);
+			
+			post_l = new JLabel(new ImageIcon("post-ad.png"));
+			browse_l = new JLabel(new ImageIcon("browse.png"));
+			post_l.setBounds(-150,-150,600,850);
+			browse_l.setBounds(150,-150,600,850);
+			post_l.addMouseListener(this);
+			browse_l.addMouseListener(this);
+			
+			p1.add(post_l);
+			p1.add(browse_l);
+			
+			frame.add(p1);
+			frame.setVisible(true);
+			frame.setResizable(false); // prevents from changing dialog box
+			frame.setSize(650, 650);
+			frame.setTitle("Welcome to OLX");
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
 		options()
 		{
 			p1 = new JPanel();

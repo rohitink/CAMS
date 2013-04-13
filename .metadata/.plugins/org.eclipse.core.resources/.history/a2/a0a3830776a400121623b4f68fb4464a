@@ -1,0 +1,282 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+
+class PostAd implements ActionListener {
+	//All Labels, Panels, etc are Declared Here
+	JPanel CONTAINER, side_p, bottom_p, main_p, cat_p, cat_scroll_p;
+	JLabel title_l, description_l, logo, heading, category_l;
+	JTextField title_tf;
+	JTextArea description_ta;
+	JButton submit, back;
+	JRadioButton cat_button_1, button;
+	ArrayList<JRadioButton> category = new ArrayList<JRadioButton>();
+	ArrayList<Integer> cat_ids = new ArrayList<Integer>();
+	JFrame frame;
+	
+	Color c1, c2, c3;
+	
+	
+	PostAd(JFrame f) {
+		frame = new JFrame();
+		frame = f;
+		c1 = new Color(12,232,12);
+		c2 = new Color(988798);
+		c3 = new Color(333333);
+		
+		//----------Initialize all the Major Panels First---------------//
+		
+		//CONTAINER is going be null layout.
+		CONTAINER = new JPanel();
+		CONTAINER.setLayout(null);
+		
+		side_p = new JPanel();
+		side_p.setBounds(5, 5, 150, 617);
+		side_p.setBackground(c1);
+		side_p.setLayout(null);
+		CONTAINER.add(side_p);
+		
+		main_p = new JPanel();
+		main_p.setLayout(null);
+		main_p.setBounds(160, 5, 480, 570);
+		//main_p.setBackground(c2);
+		CONTAINER.add(main_p);
+		
+		//NOT USING THIS BOTTOM PANEL RIGHT NOW
+		bottom_p = new JPanel();
+		bottom_p.setBounds(160, 580, 480, 40);
+		bottom_p.setBackground(c3);
+		//CONTAINER.add(bottom_p);		
+		
+		//Add Heading to the Main Panel
+		heading = new JLabel("Submit an Ad!");
+		Font f1 = new Font("Arial", Font.BOLD, 18);
+		heading.setFont(f1);
+		heading.setBounds(170,5,340,40);
+		
+		//Add Logo to Top Left in Side Panel
+		logo = new JLabel(new ImageIcon("icon.png"));
+		logo.setBounds(-10,0,150,150);
+		side_p.add(logo);
+		
+		//Adding TextFields, and areas.
+		title_l = new JLabel("Title: ", JLabel.RIGHT);
+		title_tf = new JTextField(12);
+		title_tf.addActionListener(null);
+		
+		title_l.setBounds(30,70,90,25);
+		title_tf.setBounds(150,70,250,25);
+		title_tf.setBorder(null);
+		
+		description_l = new JLabel("Description: ", JLabel.RIGHT);
+		description_ta = new JTextArea(20,5);
+		description_ta.setLineWrap(true);
+		//Set word wrap in JTextArea  
+		description_ta.setWrapStyleWord(true);  
+		
+		description_l.setBounds(30,105,90,25);
+		description_ta.setBounds(150, 105,250,200);
+		description_ta.setBorder(null);
+		
+		category_l = new JLabel("Category(s)", JLabel.RIGHT);
+		category_l.setBounds(30,340,90,25);
+		
+		//Display All Categories to Choose From as Radio Buttons
+		
+		//First Create an Outer Panel with Box Layout Settings.
+		cat_p = new JPanel();
+		cat_p.setLayout(new BoxLayout(cat_p, BoxLayout.Y_AXIS));
+		JScrollPane cat_scroll = new JScrollPane(cat_p);
+		cat_p.setSize(150, 800);
+		cat_scroll.setBounds(150,315,195,130);
+		get_categories();
+		cat_scroll.setBorder(null);
+		button.addActionListener(this);
+		
+		//Create the Submit & back Buttons
+		submit = new JButton("Post");
+		submit.setBounds(230,460,70,25);
+		submit.addActionListener(this);
+		
+		back = new JButton("Back");
+		back.setBounds(160,460,70,25);
+		back.addActionListener(this);
+		
+		//Add all items to Main Panel
+		main_p.add(heading);
+		main_p.add(title_l);
+		main_p.add(title_tf);
+		main_p.add(description_l);
+		main_p.add(description_ta);
+		main_p.add(category_l);
+		main_p.add(cat_scroll);
+		main_p.add(submit);
+		main_p.add(back);
+		
+		//Basic Settings
+		frame.add(CONTAINER);
+		frame.setVisible(true);
+		frame.setSize(650,650);
+		
+		frame.setResizable(false);
+		frame.setTitle("Submit an Ad | OLX.in");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(CONTAINER);
+	}
+	
+	public void get_categories()
+    {
+        //Create a Connection Variable and Store NULL into it.
+        Connection conn = null;
+        
+        try {
+            // Try to Connect to the Database and Do the Desired Operation;
+            // Initialize Database Variables.
+			String username = "root";
+			String password = "root";
+			String database = "olx";
+                        
+                 Class.forName("com.mysql.jdbc.Driver").newInstance();       
+                 conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/"+database, username, password);
+ 
+                 if (!conn.isClosed())
+			{
+				// We have a MySQL Connection.
+				Statement s = conn.createStatement ( );
+				s.executeQuery ("SELECT * FROM categories");
+				ResultSet rs = s.getResultSet();
+				while (rs.next()) // loop through rows of result set
+				{
+					int cat_id = rs.getInt (1);
+					String cat_name = rs.getString(2);
+					button = new JRadioButton(cat_name);
+					cat_p.add(button);
+					category.add(button);
+					cat_ids.add(cat_id);
+					button.addActionListener(this);
+					
+				} //end while
+				//repaint();
+				rs.close(); // close result set
+				s.close(); // close statement
+			} //end if
+                        else {
+                            System.out.println("Connection Closed~~~~~~~~~~");
+                        }
+            
+        } //end try block
+        catch(Exception e) {
+            System.err.println("Exception: " + e.getMessage());
+        } //end catch block
+    }
+	
+	public void insert_ad_in_database() {
+        Connection conn = null;
+        
+        try {
+			String username = "root";
+			String password = "root";
+			String database = "olx";
+                        
+                 Class.forName("com.mysql.jdbc.Driver").newInstance();       
+                 conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/"+database, username, password);
+ 
+                 if (!conn.isClosed())
+                 {
+                	
+					Statement s = conn.createStatement();
+					String title = title_tf.getText();
+					String desc = description_ta.getText();
+					int rows = s.executeUpdate ("INSERT into ads (title, description, date) values ('"+title+"','"+desc+"',CURDATE())");
+					
+					if(rows == 1)
+						JOptionPane.showMessageDialog(null, "Your Ad Was Successfully Published");
+					
+					String buttonName="";
+					
+					s.executeQuery("SELECT * FROM ads WHERE title = '"+title+"' ORDER BY id DESC LIMIT 0, 1");
+		            ResultSet rs = s.getResultSet();
+		            int ad_id = 0;
+		            while (rs.next()) // loop through rows of result set, which is just a single row here
+					{
+		            	ad_id = rs.getInt(1);
+					} 
+			        
+			        for (int i = 0 ; i < category.size() ; i++ ) { 
+			            JRadioButton cat_but = category.get(i);
+			            System.out.println("i = "+i+"Value ="+cat_but.isSelected());
+			            if(cat_but.isSelected()==true)
+			            {
+				            Integer cat_id= cat_ids.get(i);
+				            System.out.println("Cat id ="+cat_id+" Post id = "+ad_id);
+				            try {
+				            	s.executeUpdate("INSERT into ad_cat (ad_id, cat_id) values ("+ad_id+","+cat_id+")");
+				            }
+				            catch(Exception e)
+				            {
+				            	System.err.println(e.getMessage());
+				            }
+			            }
+			            
+			            
+			            
+
+			        }
+					
+					s.close();
+                	
+                	
+                 } //end if
+                 else {
+                    System.out.println("Connection Closed~~~~~~~~~~");
+                 }
+            
+        } //end try block
+        catch(Exception e) {
+        	System.err.println(e);
+        }
+        
+	}
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==submit)
+		{
+			insert_ad_in_database();
+			title_tf.setText("Database Updated");
+		}
+		if(e.getSource()==title_tf)
+		{
+			System.out.println(button.getText());
+			System.out.println("BUTTON PRESSED");
+		}
+		if(e.getSource()==back)
+		{
+			new options(frame);
+			
+			
+		}
+	  }
+	
+	
+}
