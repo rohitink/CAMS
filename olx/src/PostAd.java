@@ -27,7 +27,7 @@ class PostAd implements ActionListener {
 	JLabel title_l, description_l, logo, heading, category_l;
 	JTextField title_tf;
 	JTextArea description_ta;
-	JButton submit;
+	JButton submit, back;
 	JRadioButton cat_button_1, button;
 	ArrayList<JRadioButton> category = new ArrayList<JRadioButton>();
 	ArrayList<Integer> cat_ids = new ArrayList<Integer>();
@@ -109,11 +109,14 @@ class PostAd implements ActionListener {
 		cat_scroll.setBorder(null);
 		button.addActionListener(this);
 		
-		//Create the Submit Button
-		submit = new JButton("POST");
-		submit.setBounds(200,460,70,20);
+		//Create the Submit & back Buttons
+		submit = new JButton("Post");
+		submit.setBounds(230,460,70,25);
 		submit.addActionListener(this);
 		
+		back = new JButton("Back");
+		back.setBounds(160,460,70,25);
+		back.addActionListener(this);
 		
 		//Add all items to Main Panel
 		main_p.add(heading);
@@ -124,6 +127,7 @@ class PostAd implements ActionListener {
 		main_p.add(category_l);
 		main_p.add(cat_scroll);
 		main_p.add(submit);
+		main_p.add(back);
 		
 		//Basic Settings
 		f.add(CONTAINER);
