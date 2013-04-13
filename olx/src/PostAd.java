@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
-class PostAd extends JFrame implements ActionListener {
+class PostAd implements ActionListener {
 	//All Labels, Panels, etc are Declared Here
 	JPanel CONTAINER, side_p, bottom_p, main_p, cat_p, cat_scroll_p;
 	JLabel title_l, description_l, logo, heading, category_l;
@@ -35,8 +35,7 @@ class PostAd extends JFrame implements ActionListener {
 	Color c1, c2, c3;
 	
 	
-	PostAd() {
-		
+	PostAd(JFrame f) {
 		c1 = new Color(12,232,12);
 		c2 = new Color(988798);
 		c3 = new Color(333333);
@@ -91,7 +90,6 @@ class PostAd extends JFrame implements ActionListener {
 		//Set word wrap in JTextArea  
 		description_ta.setWrapStyleWord(true);  
 		
-		
 		description_l.setBounds(30,105,90,25);
 		description_ta.setBounds(150, 105,250,200);
 		description_ta.setBorder(null);
@@ -128,13 +126,14 @@ class PostAd extends JFrame implements ActionListener {
 		main_p.add(submit);
 		
 		//Basic Settings
-		setVisible(true);
-		setSize(650,650);
-		setLocation(200,100);
-		setResizable(false);
-		setTitle("Submit an Ad | OLX.in");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		add(CONTAINER);
+		f.add(CONTAINER);
+		f.setVisible(true);
+		f.setSize(650,650);
+		
+		f.setResizable(false);
+		f.setTitle("Submit an Ad | OLX.in");
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.add(CONTAINER);
 	}
 	
 	public void get_categories()
@@ -255,10 +254,7 @@ class PostAd extends JFrame implements ActionListener {
 		//Action Listener Stuff Here.
 	}
 	
-	public static void main(String args[])
-	{
-		new PostAd();
-	}
+	
 	
 	
 	@Override
