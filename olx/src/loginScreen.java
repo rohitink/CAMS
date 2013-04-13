@@ -116,17 +116,10 @@ public class loginScreen extends JFrame implements ActionListener {
 				s.executeQuery ("SELECT * FROM users where username = '"+name+"' and password = '"+password+"'");
 				ResultSet rs = s.getResultSet( );
 				if (rs.next()) // loop through rows of result set
-				{	try{
+				{	
 					JOptionPane.showMessageDialog(null, "Congratulations!\nLogin Successful", "Success", 1);
 					new options();
 					dispose();
-					
-					throw null;
-					
-					}
-					catch(Exception e){
-						
-					}
 				}
 				else{
 					JOptionPane.showMessageDialog(null,"Login not Successful!\ntry again", "Login Error", 2);
