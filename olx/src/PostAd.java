@@ -31,11 +31,15 @@ class PostAd implements ActionListener {
 	JRadioButton cat_button_1, button;
 	ArrayList<JRadioButton> category = new ArrayList<JRadioButton>();
 	ArrayList<Integer> cat_ids = new ArrayList<Integer>();
+	JFrame frame;
 	
 	Color c1, c2, c3;
 	
 	
 	PostAd(JFrame f) {
+		frame = new JFrame();
+		frame = f;
+		f.dispose();
 		c1 = new Color(12,232,12);
 		c2 = new Color(988798);
 		c3 = new Color(333333);
@@ -130,14 +134,15 @@ class PostAd implements ActionListener {
 		main_p.add(back);
 		
 		//Basic Settings
-		f.add(CONTAINER);
-		f.setVisible(true);
-		f.setSize(650,650);
+		frame.add(CONTAINER);
+		frame.setVisible(true);
+		frame.setSize(650,650);
 		
-		f.setResizable(false);
-		f.setTitle("Submit an Ad | OLX.in");
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(CONTAINER);
+		frame.setResizable(false);
+		frame.setTitle("Submit an Ad | OLX.in");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(CONTAINER);
+		
 	}
 	
 	public void get_categories()
@@ -268,9 +273,10 @@ class PostAd implements ActionListener {
 			System.out.println("BUTTON PRESSED");
 		}
 		if(e.getSource()==back)
-		{
-			//f.remove(CONTAINER);
-			new options();
+		{	
+			frame.remove(CONTAINER);
+			new options(frame);
+			
 			
 		}
 	  }
